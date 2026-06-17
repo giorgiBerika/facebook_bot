@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 import os 
 import httpx
 
+from ai_bot import ask_ai 
+
 load_dotenv()
 
 app = FastAPI() 
@@ -49,7 +51,9 @@ async def get_message( request: Request ):
         for msg in entry.get("messaging"):
             sender = msg.get("sender").get("id")
             content = msg.get("message").get("text")
-            await send_message(sender_id=sender, message_txt="Hey, We will text you soon!")
+
+            ai_response = await ask_ai(content)
+            await send_message(sender_id=sender, message_txt=ai_response)
     return {"status": "ok"}
 
 
